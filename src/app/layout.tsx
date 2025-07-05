@@ -2,8 +2,8 @@ import type {Metadata} from 'next';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'GeoLocator',
-  description: 'Capture and display your geolocation.',
+  title: 'Vigiatempe',
+  description: 'Real-time weather monitoring.',
 };
 
 export default function RootLayout({
