@@ -61,7 +61,6 @@ export async function registerUser(input: RegistrationInput): Promise<Registrati
 const getUsersFlow = ai.defineFlow(
   {
     name: 'getUsersFlow',
-    inputSchema: z.undefined(),
     outputSchema: z.array(UserSchema),
   },
   async () => {
