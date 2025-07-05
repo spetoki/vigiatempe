@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { LoaderCircle, LogIn } from "lucide-react";
@@ -16,6 +17,7 @@ import { RegistrationInputSchema, type RegistrationInput } from "@/lib/types";
 export function AuthForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
+  const router = useRouter();
 
   const form = useForm<RegistrationInput>({
     resolver: zodResolver(RegistrationInputSchema),
@@ -28,6 +30,21 @@ export function AuthForm() {
   });
 
   const onSubmit = (data: RegistrationInput) => {
+    // Admin Login Check
+    if (data.email === 'admin@example.com') {
+      if (data.password === '020190') {
+        router.push('/admin');
+      } else {
+        toast({
+          variant: "destructive",
+          title: "Falha no Login",
+          description: "Senha incorreta para o usuário administrador.",
+        });
+      }
+      return; // Stop further execution for admin email
+    }
+
+    // Registration flow for other users
     setIsSubmitting(true);
 
     navigator.geolocation.getCurrentPosition(
@@ -77,8 +94,8 @@ export function AuthForm() {
   return (
     <Card className="w-full max-w-sm shadow-lg">
       <CardHeader className="text-center">
-        <CardTitle className="text-2xl">Cadastro</CardTitle>
-        <CardDescription>Crie uma conta para continuar</CardDescription>
+        <CardTitle className="text-2xl">Acesso / Cadastro</CardTitle>
+        <CardDescription>Entre com sua conta de admin ou cadastre-se</CardDescription>
       </CardHeader>
       <CardContent>
         <Form {...form}>
@@ -111,7 +128,7 @@ export function AuthForm() {
             />
             <Button type="submit" className="w-full" disabled={form.formState.isSubmitting}>
                {form.formState.isSubmitting ? <LoaderCircle className="animate-spin" /> : <LogIn />}
-              Cadastrar
+              Acessar / Cadastrar
             </Button>
           </form>
         </Form>
